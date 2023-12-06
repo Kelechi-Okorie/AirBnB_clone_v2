@@ -4,6 +4,7 @@
 from fabric.operations import local
 from datetime import datetime
 
+
 def do_pack():
     """compresses contents of web_static folder"""
 
