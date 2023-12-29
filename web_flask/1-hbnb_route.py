@@ -12,10 +12,10 @@ def index():
 
     return "Hello HBNB!"
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route("/hbnb", strict_slashes=False)
 def hbnb():
     """Router for page /hbnb"""
-    
+
     return "HBNB"
 
 
