@@ -27,17 +27,16 @@ class DBStorage():
         host = getenv('HBNB_MYSQL_HOST')
         db = getenv('HBNB_MYSQL_DB')
         env = getenv('HBNB_ENV')
-        
 
         con_string = f"mysql+mysqldb://{username}:{password}@{host}/{db}"
         self.__engine = create_engine(con_string, pool_pre_ping=True)
         Session = sessionmaker(bind=self.__engine,
-                                expire_on_commit=False)
+                               expire_on_commit=False)
         self.__session = Session()
 
         if env == 'test':
             Base.metadata.drop_all(bind=self.__engine)
-    
+
     def classes(self):
         """returns a dict of classes"""
 
@@ -50,7 +49,7 @@ class DBStorage():
             "State": State,
             "User": User
         }
-    
+
     def all(self, cls=None):
         """query on the current db session and returns all objects
         depending on if the class name is given or none
@@ -60,7 +59,7 @@ class DBStorage():
             classes = [User, State, City, Amenity, Place, Review]
         else:
             classes = [self.classes()[cls]]
-        
+
         result = []
         result = self.__session.query(*classes).all()
 
@@ -71,7 +70,6 @@ class DBStorage():
             map[key] = obj
         return map
 
-
     def new(self, obj):
         """Add the object to the current database session (self.__session)"""
 
@@ -81,13 +79,13 @@ class DBStorage():
         """commit all changes of the current db session (self.__session)"""
 
         self.__session.commit()
-    
+
     def delete(self, obj=None):
         """delete from the current db session obj if not None"""
 
         if obj:
             self.__session.delete(obj)
-    
+
     def reload(self):
         """create all tables in the db using a sessionmaker"""
 
@@ -96,3 +94,8 @@ class DBStorage():
                                       expire_on_commit=False)
         Session = scoped_session(self.__session)
         self.__session = Session()
+
+    def close(self):
+        """Removes the session object"""
+
+        self.__session.close()
