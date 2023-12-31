@@ -64,6 +64,7 @@ def do_deploy(archive_path):
     print("New version deployed!")
     return True
 
+
 def deploy():
     """distributing an archive to the web server"""
 
