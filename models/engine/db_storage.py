@@ -55,20 +55,35 @@ class DBStorage():
         depending on if the class name is given or none
         """
 
-        if not cls:
-            classes = [User, State, City, Amenity, Place, Review]
+        # if not cls:
+        #     classes = [User, State, City, Amenity, Place, Review]
+        # else:
+        #     classes = [self.classes()[cls]]
+
+        # result = []
+        # result = self.__session.query(*classes).all()
+
+        # map = {}
+        # for obj in result:
+        #     key = '{}.{}'.format(type(obj).__name__, obj.id)
+        #     obj.pop("_sa_instance_state")
+        #     map[key] = obj
+        # return map
+        if cls:
+            objs = self.__session.query(self.classes()[cls])
         else:
-            classes = [self.classes()[cls]]
+            objs = self.__session.query(State).all()
+            objs += self.__session.query(City).all()
+            objs += self.__session.query(User).all()
+            objs += self.__session.query(Place).all()
+            objs += self.__session.query(Amenity).all()
+            objs += self.__session.query(Review).all()
 
-        result = []
-        result = self.__session.query(*classes).all()
-
-        map = {}
-        for obj in result:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
-            obj.pop("_sa_instance_state")
-            map[key] = obj
-        return map
+        dic = {}
+        for obj in objs:
+            k = '{}.{}'.format(type(obj).__name__, obj.id)
+            dic[k] = obj
+        return dic
 
     def new(self, obj):
         """Add the object to the current database session (self.__session)"""
