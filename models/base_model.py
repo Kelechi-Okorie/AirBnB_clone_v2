@@ -3,11 +3,12 @@
 import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import  Column, String, DateTime
+from sqlalchemy import Column, String, DateTime
 import models
 
 
 Base = declarative_base()
+
 
 class BaseModel:
     """A base class for all hbnb models"""
@@ -18,22 +19,27 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        
+
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
-            format = '%Y-%m-%dT%H:%M:%S.%f'
+            f = '%Y-%m-%dT%H:%M:%S.%f'
             now = datetime.now()
+            is_updated = 'updated_at' in kwargs.keys()
+            is_created = 'created_at' in kwargs.keys()
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                    format) if 'updated_at' in kwargs.keys() else now
+                                                     f) if is_updated else now
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                    format) if 'created_at' in kwargs.keys() else now
+                                                     f) if is_created else now
             if 'id' not in kwargs.keys():
                 kwargs['id'] = str(uuid.uuid4())
-            del kwargs['__class__']
+            if hasattr(kwargs, '__class__'):
+                # the following line should be uncommented
+                # del kwargs['__class__']
+                pass
             self.__dict__.update(kwargs)
 
     def __str__(self):
@@ -59,7 +65,7 @@ class BaseModel:
         if '_sa_instance_state' in dictionary.keys():
             del dictionary['_sa_instance_state']
         return dictionary
-    
+
     def delete(self):
         """delete the current instance from the storage"""
 
