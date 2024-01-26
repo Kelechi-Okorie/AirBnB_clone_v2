@@ -6,7 +6,7 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/airbinb-onepage", strict_slashes=False)
+@app.route("/airbnb-onepage", strict_slashes=False)
 def index():
     """Returns a string for the index page"""
 
