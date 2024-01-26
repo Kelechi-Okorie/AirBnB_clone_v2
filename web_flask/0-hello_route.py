@@ -6,7 +6,7 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/", strict_slashes=False)
+@app.route("/airbinb-onepage", strict_slashes=False)
 def index():
     """Returns a string for the index page"""
 
@@ -14,4 +14,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0:5000")
